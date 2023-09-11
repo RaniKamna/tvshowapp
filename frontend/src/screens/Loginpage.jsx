@@ -25,7 +25,7 @@ export const Loginpage = () => {
             }
 
             if (credentials.email === "user1@example.com" && credentials.password === "password123") {
-                navigate("/");
+                navigate("/search");
             } else {
                 setError("Invalid email or password");
                 setOpenSnackbar(true);
