@@ -14,22 +14,39 @@ export const Loginpage = () => {
         return regex.test(password);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-
             if (!validatePassword(credentials.password)) {
                 setError("Password must be 8 to 16 alphanumeric characters");
                 setOpenSnackbar(true);
                 return;
             }
+            const authToken = localStorage.getItem("authToken");
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `${authToken}`
+                },
+                body: JSON.stringify({
+                    email: credentials.email,
+                    password: credentials.password,
+                }),
+            });
 
-            if (credentials.email === "user1@example.com" && credentials.password === "password123") {
-                navigate("/search");
-            } else {
+            const json = await response.json();
+
+            if (!json.success) {
                 setError("Invalid email or password");
                 setOpenSnackbar(true);
             }
+            if (json.success) {
+                localStorage.setItem("userEmail", credentials.email);
+                localStorage.setItem("authToken", json.authToken);
+                navigate("/search");
+            }
+
         } catch (error) {
             console.log(error);
         }
