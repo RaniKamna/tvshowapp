@@ -46,6 +46,10 @@ app.get('/search/shows', async (req, res) => {
     }
 });
 
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+});
+
 app.use('/api', userRouter);
 
 app.listen(port, () => {
