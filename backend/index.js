@@ -29,6 +29,12 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+});
+
+app.use('/api', userRouter);
+
 app.get('/search/shows', async (req, res) => {
     try {
         const query = req.query.q;
@@ -46,11 +52,6 @@ app.get('/search/shows', async (req, res) => {
     }
 });
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-});
-
-app.use('/api', userRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
