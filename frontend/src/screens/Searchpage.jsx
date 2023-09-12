@@ -9,21 +9,13 @@ export const Searchpage = () => {
 
     const handleSearch = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/search`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            });
-
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/search/shows?q=${query}`)
             const responseData = await response.json();
 
             setData(responseData);
-
-            console.log(data)
             if (data.length === 0) {
                 setNoData(true);
-                setOpenSnackbar(true);
+                setOpenSnackbar(false);
             } else {
                 setData(data);
                 setNoData(false);
@@ -41,7 +33,7 @@ export const Searchpage = () => {
     return (
         <div>
             <div className='searchcontainer'>
-            <h2 className='serchheader'>Search TV Show</h2>
+                <h2 className='serchheader'>Search TV Show</h2>
                 <TextField
                     label="Search TV tvShows"
                     variant="outlined"
@@ -69,16 +61,16 @@ export const Searchpage = () => {
 
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 {data.map((tvshow) => (
-                    <Card key={tvshow.id} style={{ width: 300, margin: 16 }}>
+                    <Card key={tvshow.show.id} style={{ width: 300, margin: 16 }}>
                         <CardContent>
-                            <img src={tvshow.poster} alt={tvshow.name} style={{ maxWidth: '100%' }} />
-                            <h3>{tvshow.name}</h3>
-                            <p>{tvshow.summary}</p>
-                            <p>Type: {tvshow.type}</p>
-                            <p>Language: {tvshow.language}</p>
-                            <p>Genres: {tvshow.genres.join(', ')}</p>
-                            <p>Status: {tvshow.status}</p>
-                            <p>Schedule: {tvshow.schedule}</p>
+                            <img src={tvshow.show.image.original} alt={tvshow.show.name} style={{ maxWidth: '100%' }} />
+                            <h3>{tvshow.show.name}</h3>
+                            <p>{tvshow.show.summary}</p>
+                            <p>Type: {tvshow.show.type}</p>
+                            <p>Language: {tvshow.show.language}</p>
+                            <p>Genres: {tvshow.show.genres.join(", ")}</p>
+                            <p>Status: {tvshow.show.status}</p>
+                            <p>Schedule: {tvshow.show.schedule.days.join(", ")}</p>
                         </CardContent>
                     </Card>
                 ))}
